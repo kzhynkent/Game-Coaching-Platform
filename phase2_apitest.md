@@ -64,6 +64,25 @@ Now let's test the "Demand-Side Magnet" and make sure the server dynamically str
      "social_links": "http://tracker.gg/kurt",
      "exact_username": "Kurt123"
    }
+   Returned: 
+   {
+    "success": true,
+    "data": {
+        "id": "e4b0f4de-57f5-424f-ab51-b961b877f9b4",
+        "player_id": "38e6d76d-e418-42f4-a12c-77e5635beb88",
+        "game_title": "Valorant",
+        "target_rank": "Diamond",
+        "goal": "Improve crosshair placement",
+        "budget": "50.00",
+        "description": "Please help me! My discord is [removed] and my profile is [removed] Call me at [removed].",
+        "discord_tag": null,
+        "social_links": null,
+        "exact_username": null,
+        "status": "open",
+        "created_at": "2026-03-06T02:48:52.279Z",
+        "updated_at": "2026-03-06T02:48:52.279Z"
+    }
+}
    ```
 7. Click **Send**.
 8. **Expected Result:** A `201 Created` status. Look at the `description` in the response — the Discord tag, URL, and phone number should all be replaced with `[removed]`. Contact fields like `discord_tag`, `social_links`, and `exact_username` will strictly return `null` in the API response, even though they were saved to the database.
