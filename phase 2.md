@@ -83,3 +83,22 @@ requirePlayer
 src/app.js
 : All API routes are mounted seamlessly.
 Global Error Catcher: Appended at the end of the Express stack. Any internal error passed via next(err) that bypasses standard controllers is caught and neutralized into a generic JSON error object. No internal PostgreSQL errors can ever reach the frontend.
+
+---
+
+## 5. API Endpoints Reference
+
+### Authentication (`/api/auth`)
+| Method | Endpoint | Auth Required | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | No | Registers a new user. Expects `email`, `password`, and `role` (`player` or `coach`). If `coach`, auto-creates a linked `coach_profile`. Returns a JWT token. |
+| `POST` | `/api/auth/login` | No | Logs in an existing user. Expects `email` and `password`. Returns a fresh JWT token. |
+
+### Bounty Board CRUD (`/api/requests`)
+| Method | Endpoint | Auth Required | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/requests` | No | Fetches a paginated list of all open coaching requests. *Security: Contact fields are permanently masked to `null`.* |
+| `GET` | `/api/requests/:id` | No | Fetches a single coaching request by its UUID. *Security: Contact fields are permanently masked to `null`.* |
+| `POST` | `/api/requests` | Yes (`player`) | Creates a new coaching request. The `description` field is passed through the regex scrubber before insertion. Contact fields can be provided but will not be readable back via `GET`. |
+| `PUT` | `/api/requests/:id` | Yes (Owner) | Updates an existing coaching request. Only the player who created the request can update it. Can also update the `status` (`open`, `filled`, `cancelled`). |
+| `DELETE` | `/api/requests/:id` | Yes (Owner) | Hard deletes the coaching request from the database. |
