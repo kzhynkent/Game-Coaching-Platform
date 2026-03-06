@@ -9,18 +9,18 @@ This document outlines the sequential execution strategy for building the platfo
 ## Phase 1: Foundation & Repository Management
 **Goal:** Establish a rock-solid infrastructure and development environment.
 
-* [ ] **Initialize Repositories:** Set up Git repositories (either a monorepo or separate `frontend` and `backend` directories).
-* [ ] **Environment Configuration:** Create `.env` files for local development containing placeholders for database URIs, JWT secrets, and Stripe keys.
-* [ ] **Backend Boilerplate:** Initialize the Node.js/Express server. Implement standard middleware (CORS, Helmet for security, JSON body parsing).
-* [ ] **Frontend Boilerplate:** Initialize the Next.js application with Tailwind CSS and basic routing structure.
+* [x] **Initialize Repositories:** Set up Git repositories (either a monorepo or separate `frontend` and `backend` directories).
+* [x] **Environment Configuration:** Create `.env` files for local development containing placeholders for database URIs, JWT secrets, and Stripe keys.
+* [x] **Backend Boilerplate:** Initialize the Node.js/Express server. Implement standard middleware (CORS, Helmet for security, JSON body parsing).
+* [x] **Frontend Boilerplate:** Initialize the Next.js application with Tailwind CSS and basic routing structure.
 
 ## Phase 2: Database & API Core (The Engine)
 **Goal:** Build the PostgreSQL database and the API routes that feed the frontend.
 
-* [ ] **Execute Migrations:** Write and run SQL scripts to create the `users`, `coach_profiles`, `coaching_requests`, and `availability_blocks` tables. Enforce strict `TIMESTAMPTZ` for all dates.
-* [ ] **Authentication Flow:** Implement user registration and login endpoints. Set up JWT strategies to differentiate between `player` and `coach` roles.
-* [ ] **Bounty Board API (CRUD):** Build Express endpoints for players to create, read, update, and delete their `coaching_requests`.
-* [ ] **Implement Regex Scrubbing:** Write the server-side middleware to scan player descriptions and strip out Discord tags, URLs, and phone numbers before database insertion.
+* [x] **Execute Migrations:** Write and run SQL scripts to create the `users`, `coach_profiles`, `coaching_requests`, and `availability_blocks` tables. Enforce strict `TIMESTAMPTZ` for all dates.
+* [x] **Authentication Flow:** Implement user registration and login endpoints. Set up JWT strategies to differentiate between `player` and `coach` roles.
+* [x] **Bounty Board API (CRUD):** Build Express endpoints for players to create, read, update, and delete their `coaching_requests`.
+* [x] **Implement Regex Scrubbing:** Write the server-side middleware to scan player descriptions and strip out Discord tags, URLs, and phone numbers before database insertion.
 
 ## Phase 3: The Frontend Discovery Layer (The Magnet)
 **Goal:** Connect the Next.js UI to the backend to render the Demand-Side Magnet.
