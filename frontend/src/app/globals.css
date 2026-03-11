@@ -227,5 +227,36 @@ body {
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
+  
+  /* Cyber UI Utilities */
+  .clip-chamfer {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  }
+  .clip-chamfer-reverse {
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+  }
+  .bg-grid-cyber {
+    background-image: 
+      linear-gradient(rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .scanline {
+    background: linear-gradient(to bottom, transparent 50%, rgba(15, 10, 40, 0.15) 51%);
+    background-size: 100% 4px;
+    animation: scan 10s linear infinite;
+  }
+  .glow-text {
+    text-shadow: 0 0 20px rgba(124, 58, 237, 0.6), 0 0 40px rgba(6, 182, 212, 0.4);
+  }
 }
 
+@keyframes scan {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
