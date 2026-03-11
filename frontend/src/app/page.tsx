@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Lock, ChevronRight, Zap, Users, Trophy, Star, TrendingUp, Shield, DollarSign, Eye, Target, Flame } from 'lucide-react';
+import { Lock, ChevronRight, Zap, Users, Trophy, Star, TrendingUp, Shield, DollarSign, Eye, Target, Flame, Wallet, Layers, Clock } from 'lucide-react';
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 
@@ -29,12 +29,12 @@ const MOCK_BOUNTIES = [
     gameIcon: '🎯',
     gameColor: '#ff4655',
     rank: 'Diamond II',
-    rankIcon: '💎',
+    rankColor: '#818cf8',
     goal: 'Reach Immortal before next act ends. Need help with mid-round calling & agent selection.',
     budget: '$45/hr',
-    sessions: '3 sessions',
+    sessions: 3,
     postedAgo: '12 min ago',
-    isHot: true,
+    isLive: true,
     contact: 'valorantpro_jay#1337',
     profile: 'Jay M.',
   },
@@ -43,12 +43,12 @@ const MOCK_BOUNTIES = [
     gameIcon: '💣',
     gameColor: '#f0c040',
     rank: 'Legendary Eagle',
-    rankIcon: '🦅',
+    rankColor: '#fbbf24',
     goal: 'Global Elite push. Spray control and utility usage are my biggest weaknesses right now.',
     budget: '$60/hr',
-    sessions: '5 sessions',
+    sessions: 5,
     postedAgo: '34 min ago',
-    isHot: true,
+    isLive: true,
     contact: 'cs_grinder99#4521',
     profile: 'Marcus R.',
   },
@@ -57,12 +57,12 @@ const MOCK_BOUNTIES = [
     gameIcon: '⚔️',
     gameColor: '#c89b3c',
     rank: 'Plat I',
-    rankIcon: '⚡',
+    rankColor: '#38bdf8',
     goal: 'Jungle macro, objective control & wave management. Want to climb to Emerald this split.',
     budget: '$35/hr',
-    sessions: '2 sessions',
+    sessions: 2,
     postedAgo: '1 hr ago',
-    isHot: false,
+    isLive: false,
     contact: 'loljungler_22#KR1',
     profile: 'Sena K.',
   },
@@ -132,116 +132,92 @@ const PRICING_PLANS = [
 
 function BountyCard({ bounty, index }: { bounty: typeof MOCK_BOUNTIES[0]; index: number }) {
   return (
-    <div
-      className="relative flex-shrink-0 w-80 overflow-hidden clip-chamfer group transition-transform duration-300 hover:-translate-y-1"
-      style={{
-        background: 'linear-gradient(135deg, rgba(15,10,40,0.95) 0%, rgba(20,15,50,0.95) 100%)',
-        border: '1px solid rgba(139,92,246,0.25)',
-        boxShadow: '0 0 40px rgba(139,92,246,0.08)',
-        animationDelay: `${index * 0.1}s`,
-      }}
-    >
-      {/* Tech corner accent */}
-      <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 50%, rgba(139,92,246,0.2) 50%)' }} />
-      {/* Hot badge */}
-      {bounty.isHot && (
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold"
-          style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', color: '#f87171' }}>
-          <Flame size={10} /> LIVE
-        </div>
-      )}
+    <div className="bounty-card flex-shrink-0" style={{ animationDelay: `${index * 0.1}s` }}>
+        <div className="card-accent-bar" style={{ background: `linear-gradient(90deg, ${bounty.gameColor} 0%, #7c3aed 60%, transparent 100%)` }} />
 
-      <div className="p-5">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-            style={{ background: `${bounty.gameColor}18`, border: `1px solid ${bounty.gameColor}40` }}>
-            {bounty.gameIcon}
+        {/* ── Header: Game + Rank + Live badge ── */}
+        <div className="card-header">
+          <div className="game-identity">
+            <div className="game-icon-wrap" style={{ background: `${bounty.gameColor}1A`, border: `1px solid ${bounty.gameColor}33` }}>
+              {bounty.gameIcon}
+            </div>
+            <div>
+              <div className="game-name">{bounty.game}</div>
+              <div className="rank-chip" style={{ background: `${bounty.rankColor}1A`, border: `1px solid ${bounty.rankColor}33`, color: bounty.rankColor }}>
+                <span>💎</span> {bounty.rank}
+              </div>
+            </div>
           </div>
-          <div>
-            <p className="font-bold text-sm text-white">{bounty.game}</p>
-            <p className="text-xs" style={{ color: 'rgba(196,181,253,0.7)' }}>
-              {bounty.rankIcon} {bounty.rank}
-            </p>
-          </div>
+          {bounty.isLive && (
+            <div className="live-pill">
+              <span className="live-dot" />
+              Live
+            </div>
+          )}
         </div>
 
-        {/* Goal */}
-        <p className="text-xs leading-relaxed mb-4" style={{ color: 'rgba(203,213,225,0.75)' }}>
-          {bounty.goal}
-        </p>
+        {/* ── Goal ── */}
+        <div className="card-goal">
+          <div className="goal-label">Goal</div>
+          <p className="goal-text">{bounty.goal}</p>
+        </div>
 
-        {/* Budget row */}
-        <div className="flex items-center justify-between mb-4 pb-4"
-          style={{ borderBottom: '1px solid rgba(139,92,246,0.12)' }}>
-          <div>
-            <p className="text-xs" style={{ color: 'rgba(148,163,184,0.6)' }}>Budget</p>
-            <p className="font-bold text-base" style={{
-              background: 'linear-gradient(90deg, #a78bfa, #60a5fa)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>{bounty.budget}</p>
+        {/* ── Stats strip ── */}
+        <div className="card-stats">
+          <div className="stat-cell">
+            <div className="stat-icon-label">
+              <Wallet size={9} /> Budget
+            </div>
+            <span className="stat-value budget">{bounty.budget}</span>
           </div>
-          <div className="text-right">
-            <p className="text-xs" style={{ color: 'rgba(148,163,184,0.6)' }}>Sessions</p>
-            <p className="font-semibold text-sm text-white">{bounty.sessions}</p>
+          <div className="stat-cell">
+            <div className="stat-icon-label">
+              <Layers size={9} /> Sessions
+            </div>
+            <span className="stat-value sessions">{bounty.sessions}</span>
           </div>
-          <div className="text-right">
-            <p className="text-xs" style={{ color: 'rgba(148,163,184,0.6)' }}>Posted</p>
-            <p className="font-semibold text-sm" style={{ color: '#4ade80' }}>{bounty.postedAgo}</p>
+          <div className="stat-cell">
+            <div className="stat-icon-label">
+              <Clock size={9} /> Posted
+            </div>
+            <span className="stat-value posted">{bounty.postedAgo}</span>
           </div>
         </div>
 
-        {/* Locked contact fields */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'rgba(148,163,184,0.5)' }}>Contact Info</p>
-
-          {/* Discord - blurred */}
-          <div className="relative rounded-lg overflow-hidden">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm"
-              style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.15)' }}>
-              <span className="text-base">💬</span>
-              <span className="text-white text-xs font-mono" style={{ filter: 'blur(5px)', userSelect: 'none' }}>
-                {bounty.contact}
-              </span>
+        {/* ── Contact (locked) ── */}
+        <div className="card-contact">
+          <div className="contact-label">Contact Info</div>
+          <div className="contact-rows">
+            <div className="contact-row">
+              <div className="contact-row-left">
+                <span className="contact-platform">💬</span>
+                <span className="contact-blurred">{bounty.contact}</span>
+              </div>
+              <div className="lock-tag">
+                <Lock size={10} /> Locked
+              </div>
             </div>
-            <div className="absolute inset-0 flex items-center justify-center rounded-lg"
-              style={{ background: 'rgba(8,5,25,0.5)', backdropFilter: 'blur(1px)' }}>
-              <Lock size={13} className="text-purple-400 mr-1.5" />
-              <span className="text-xs font-semibold text-purple-300">Locked</span>
-            </div>
-          </div>
-
-          {/* Profile - blurred */}
-          <div className="relative rounded-lg overflow-hidden">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm"
-              style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.15)' }}>
-              <span className="text-base">👤</span>
-              <span className="text-white text-xs" style={{ filter: 'blur(5px)', userSelect: 'none' }}>
-                {bounty.profile}
-              </span>
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center rounded-lg"
-              style={{ background: 'rgba(8,5,25,0.5)', backdropFilter: 'blur(1px)' }}>
-              <Lock size={13} className="text-purple-400 mr-1.5" />
-              <span className="text-xs font-semibold text-purple-300">Locked</span>
+            <div className="contact-row">
+              <div className="contact-row-left">
+                <span className="contact-platform">👤</span>
+                <span className="contact-blurred">{bounty.profile}</span>
+              </div>
+              <div className="lock-tag">
+                <Lock size={10} /> Locked
+              </div>
             </div>
           </div>
         </div>
 
-        {/* CTA */}
-        <Link href="/auth/register?plan=pro#pricing">
-          <button className="mt-4 w-full py-2.5 rounded-xl text-sm font-bold transition-all duration-200 hover:opacity-90 active:scale-95"
-            style={{
-              background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(59,130,246,0.2))',
-              border: '1px solid rgba(139,92,246,0.5)',
-              color: '#c4b5fd',
-            }}>
-            🔓 Subscribe to Unlock Lead
-          </button>
-        </Link>
+        {/* ── CTA ── */}
+        <div className="card-cta">
+          <Link href="/auth/register?plan=pro#pricing" className="block w-full">
+            <button className="cta-button">
+              🔓 Subscribe to Unlock Lead
+            </button>
+          </Link>
+        </div>
       </div>
-    </div>
   );
 }
 
@@ -351,13 +327,12 @@ export default function HomePage() {
               style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 70%)' }} />
 
             {/* Floating card */}
-            <div className="relative w-80 p-6 transition-transform duration-500 clip-chamfer"
+            <div className="relative w-80 p-6 transition-transform duration-500 rounded-2xl"
               style={{
                 background: 'linear-gradient(135deg, rgba(15,10,40,0.98), rgba(20,15,55,0.98))',
                 border: '1px solid rgba(139,92,246,0.4)',
                 boxShadow: '0 0 60px rgba(139,92,246,0.2), 0 30px 60px rgba(0,0,0,0.5)',
               }}>
-              <div className="absolute top-0 right-0 w-10 h-10 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 50%, rgba(139,92,246,0.3) 50%)' }} />
               {/* Live badge */}
               <div className="absolute -top-3 left-6 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
                 style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', color: '#f87171' }}>
@@ -447,7 +422,7 @@ export default function HomePage() {
         </div>
 
         {/* Bounty Cards horizontal scroll */}
-        <div className="flex gap-5 overflow-x-auto pb-4 justify-center flex-wrap lg:flex-nowrap">
+        <div className="flex gap-5 overflow-x-auto pt-6 pb-12 px-2 justify-center flex-wrap lg:flex-nowrap">
           {MOCK_BOUNTIES.map((bounty, i) => (
             <BountyCard key={i} bounty={bounty} index={i} />
           ))}
@@ -665,27 +640,41 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════
           SECTION 5 — SUPPORTED GAMES
       ══════════════════════════════════════════════════════ */}
-      <section className="relative max-w-7xl mx-auto px-6 py-20">
+      <section className="relative max-w-full mx-auto py-20 overflow-hidden" style={{ borderTop: '1px solid rgba(139,92,246,0.1)' }}>
         <h2 className="font-orbitron text-2xl font-black text-white text-center mb-10">
           Supported Games
         </h2>
-        <div className="flex flex-wrap gap-3 justify-center">
-          {GAMES.map((g) => (
-            <div
-              key={g.name}
-              className="flex items-center gap-3 px-5 py-3 rounded-xl transition-all duration-200 hover:-translate-y-0.5 cursor-default"
-              style={{
-                background: 'rgba(15,10,40,0.6)',
-                border: '1px solid rgba(139,92,246,0.2)',
-                boxShadow: `0 0 20px ${g.color}08`,
-              }}>
-              <span className="text-xl">{g.icon}</span>
-              <span className="font-semibold text-sm text-slate-200">{g.name}</span>
-            </div>
-          ))}
-          <div className="flex items-center gap-3 px-5 py-3 rounded-xl"
-            style={{ background: 'rgba(15,10,40,0.3)', border: '1px dashed rgba(139,92,246,0.2)' }}>
-            <span className="text-slate-500 text-sm font-semibold">+6 more coming soon</span>
+        
+        {/* Seamless Infinite Marquee Carousel */}
+        <div className="flex overflow-hidden group w-full relative py-4">
+          {/* Gradient fade edges */}
+          <div className="absolute top-0 bottom-0 left-0 w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #03020f, transparent)' }} />
+          <div className="absolute top-0 bottom-0 right-0 w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #03020f, transparent)' }} />
+          
+          <div className="flex gap-4 min-w-max animate-marquee group-hover:[animation-play-state:paused] px-2 items-center">
+            {([...GAMES, ...GAMES, ...GAMES, ...GAMES]).map((g, idx) => (
+              <div
+                key={`${g.name}-${idx}`}
+                className="flex items-center gap-3 px-6 py-3.5 rounded-2xl transition-all duration-300 cursor-pointer flex-shrink-0 group/game relative overflow-hidden bg-gradient-to-br from-[#0f0a28]/90 to-[#140c32]/95 border border-purple-500/30 hover:-translate-y-1.5 hover:shadow-[0_10px_30px_-5px_var(--game-shadow)] hover:border-purple-400/60 hover:from-[#1a0f3c]/95 hover:to-[#221550]/95 min-w-[180px]"
+                style={{
+                  '--game-shadow': `${g.color}50`
+                } as React.CSSProperties}
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/5 opacity-0 group-hover/game:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <span className="text-xl drop-shadow-lg transition-transform duration-300 group-hover/game:scale-125 z-10">{g.icon}</span>
+                <span className="font-bold text-sm transition-colors duration-300 z-10 text-slate-200 w-max whitespace-nowrap group-hover/game:text-white">
+                  {g.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Coming Soon Indicator */}
+        <div className="flex justify-center mt-6">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-dashed border-purple-500/30 bg-purple-900/10">
+            <span className="text-sm font-semibold text-purple-300/80 tracking-wide">+6 more coming soon</span>
+            <span className="text-sm">✨</span>
           </div>
         </div>
       </section>

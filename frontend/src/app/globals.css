@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@400;500&display=swap');
 
 :root {
   --bg-primary: #080c14;
@@ -249,6 +250,9 @@ body {
   .glow-text {
     text-shadow: 0 0 20px rgba(124, 58, 237, 0.6), 0 0 40px rgba(6, 182, 212, 0.4);
   }
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
 }
 
 @keyframes scan {
@@ -259,4 +263,299 @@ body {
 @keyframes pulse-slow {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* =========================================================================
+   BOUNTY CARD REWORK STYLES
+   ========================================================================= */
+
+.bounty-card {
+  font-family: 'DM Sans', sans-serif;
+  width: 340px;
+  background: #0d0b1e;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(139,92,246,0.2);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03) inset,
+    0 30px 60px rgba(0,0,0,0.5),
+    0 0 80px rgba(139,92,246,0.05);
+  position: relative;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.bounty-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03) inset,
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 100px rgba(139,92,246,0.08);
+}
+
+/* Colored top accent bar */
+.card-accent-bar {
+  height: 3px;
+  background: linear-gradient(90deg, #ff4655 0%, #7c3aed 60%, transparent 100%);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.game-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  font-size: 22px;
+  background: rgba(255,70,85,0.1);
+  border: 1px solid rgba(255,70,85,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.game-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+
+.rank-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(129,140,248,0.1);
+  border: 1px solid rgba(129,140,248,0.2);
+  color: #a5b4fc;
+}
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #f87171;
+  flex-shrink: 0;
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f87171;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Goal section */
+.card-goal {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.goal-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148,163,184,0.4);
+  margin-bottom: 6px;
+}
+
+.goal-text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: rgba(203,213,225,0.75);
+}
+
+/* Stats strip */
+.card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.stat-cell {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.stat-cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(255,255,255,0.05);
+}
+
+.stat-icon-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(148,163,184,0.4);
+}
+
+.stat-value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-value.budget {
+  background: linear-gradient(90deg, #a78bfa, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-value.sessions { color: #f1f5f9; }
+.stat-value.posted { color: #4ade80; }
+
+/* Contact section */
+.card-contact {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.contact-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148,163,184,0.35);
+  margin-bottom: 10px;
+}
+
+.contact-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(99,102,241,0.06);
+  border: 1px solid rgba(99,102,241,0.12);
+}
+
+.contact-row-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-platform {
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.contact-blurred {
+  font-size: 12px;
+  color: rgba(203,213,225,0.5);
+  filter: blur(5px);
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+.lock-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(167,139,250,0.6);
+  flex-shrink: 0;
+}
+
+/* CTA */
+.card-cta {
+  padding: 14px 20px 18px;
+}
+
+.cta-button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  color: white;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.35), 0 1px 0 rgba(255,255,255,0.1) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+}
+
+.cta-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px rgba(124,58,237,0.5);
+}
+
+.cta-button:active {
+  transform: translateY(0);
 }
