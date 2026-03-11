@@ -13,7 +13,12 @@ async function getAll(req, res) {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 20;
-        const requests = await getAllRequests({ page, limit });
+        const requests = await getAllRequests({
+            page,
+            limit,
+            isProCoach: req.isProCoach || false,
+            requesterId: req.user?.userId || null,
+        });
         return res.status(200).json({ success: true, data: requests });
     } catch (err) {
         console.error('[requestController.getAll]', err.message);
@@ -24,7 +29,10 @@ async function getAll(req, res) {
 /** GET /api/requests/:id */
 async function getOne(req, res) {
     try {
-        const request = await getRequestById(req.params.id);
+        const request = await getRequestById(req.params.id, {
+            isProCoach: req.isProCoach || false,
+            requesterId: req.user?.userId || null,
+        });
         if (!request) {
             return res.status(404).json({ success: false, error: 'Coaching request not found.' });
         }
@@ -34,6 +42,7 @@ async function getOne(req, res) {
         return res.status(500).json({ success: false, error: 'Failed to retrieve request.' });
     }
 }
+
 
 /** POST /api/requests */
 async function create(req, res) {

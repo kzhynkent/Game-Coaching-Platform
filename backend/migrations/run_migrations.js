@@ -10,6 +10,7 @@ const migrationFiles = [
     '002_create_coach_profiles.sql',
     '003_create_coaching_requests.sql',
     '004_create_availability_blocks.sql',
+    '005_add_rank_to_coach_profiles.sql',
 ];
 
 async function runMigrations() {

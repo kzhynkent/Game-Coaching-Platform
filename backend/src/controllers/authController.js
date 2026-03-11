@@ -1,5 +1,13 @@
 const { registerUser, loginUser } = require('../services/authService');
 
+/** Shared cookie options for the auth_token httpOnly cookie. */
+const COOKIE_OPTIONS = {
+    httpOnly: true,       // Not accessible from JavaScript (XSS protection)
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+    sameSite: 'strict',  // Blocks cross-site request forgery
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+};
+
 /**
  * POST /api/auth/register
  */
@@ -20,7 +28,8 @@ async function register(req, res) {
 
     try {
         const { token, user } = await registerUser({ email, password, role });
-        return res.status(201).json({ success: true, token, user });
+        res.cookie('auth_token', token, COOKIE_OPTIONS);
+        return res.status(201).json({ success: true, user });
     } catch (err) {
         const status = err.status || 500;
         const message = status < 500 ? err.message : 'An unexpected error occurred.';
@@ -40,7 +49,8 @@ async function login(req, res) {
 
     try {
         const { token, user } = await loginUser({ email, password });
-        return res.status(200).json({ success: true, token, user });
+        res.cookie('auth_token', token, COOKIE_OPTIONS);
+        return res.status(200).json({ success: true, user });
     } catch (err) {
         const status = err.status || 500;
         const message = status < 500 ? err.message : 'An unexpected error occurred.';
@@ -48,4 +58,14 @@ async function login(req, res) {
     }
 }
 
-module.exports = { register, login };
+/**
+ * POST /api/auth/logout
+ * Clears the httpOnly auth cookie.
+ */
+function logout(req, res) {
+    res.clearCookie('auth_token', { httpOnly: true, sameSite: 'strict', secure: process.env.NODE_ENV === 'production' });
+    return res.status(200).json({ success: true, message: 'Logged out successfully.' });
+}
+
+module.exports = { register, login, logout };
+
